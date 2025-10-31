@@ -1,3 +1,4 @@
+import { handleGetSBTInformation } from "./sbt";
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -31,6 +32,9 @@ export default {
 
       case method === "GET" && pathname === "/health":
         return handleHealthCheck();
+
+      case method === "GET" && pathname === "/sbt":
+        return handleGetSBTInformation(request);
 
       default:
         return createErrorResponse("NOT_FOUND", "Route not found", 404);
