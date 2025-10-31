@@ -34,7 +34,7 @@ export default {
         return handleHealthCheck();
 
       case method === "GET" && pathname === "/sbt":
-        return handleGetSBTInformation(request);
+        return handleGetSBTInformation(request, env);
 
       default:
         return createErrorResponse("NOT_FOUND", "Route not found", 404);

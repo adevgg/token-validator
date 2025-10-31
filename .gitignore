@@ -6,7 +6,10 @@ dist/
 .env.local
 .DS_Store
 *.tsbuildinfo
+.dev.vars
 
 # Package manager lock files (keep pnpm-lock.yaml, ignore others)
 package-lock.json
 yarn.lock
+
+google-sheet-scripts/

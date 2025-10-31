@@ -14,12 +14,15 @@ import { getEIP1967ImplicitAddress } from "./helpers/eip1967";
 import { createErrorResponse, createSuccessResponse } from "./utils";
 
 export async function handleGetSBTInformation(
-  request: Request
+  request: Request,
+  env: Env
 ): Promise<Response> {
   const url = new URL(request.url);
   const address = url.searchParams.get("address");
   const chain = url.searchParams.get("chain");
-  const client = getClient(chain as string);
+  const client = getClient(chain as string, {
+    infuraApiKey: env.INFURA_API_KEY,
+  });
 
   if (!address || !chain || !isAddress(address) || !client) {
     return createErrorResponse(

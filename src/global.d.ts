@@ -6,6 +6,7 @@ declare global {
     // Add your environment variables here
     // EXAMPLE_API_KEY?: string;
     // VALIDATION_CACHE?: KVNamespace;
+    INFURA_API_KEY?: string;
   }
 }
 

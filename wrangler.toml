@@ -16,3 +16,11 @@ compatibility_flags = ["nodejs_compat"]
 # [[durable_objects.bindings]]
 # name = "VALIDATOR_DO"
 # class_name = "ValidatorDO"
+
+
+[observability]
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
