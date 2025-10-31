@@ -1,0 +1,12 @@
+node_modules/
+.wrangler/
+dist/
+*.log
+.env
+.env.local
+.DS_Store
+*.tsbuildinfo
+
+# Package manager lock files (keep pnpm-lock.yaml, ignore others)
+package-lock.json
+yarn.lock
