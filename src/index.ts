@@ -1,9 +1,9 @@
-import { handleGetSBTInformation } from "./sbt";
 import {
   createErrorResponse,
   createSuccessResponse,
   handleCors,
-} from "./utils";
+} from "./helpers/utils";
+import { handleGetSBTInformation } from "./lib/sbt";
 
 // Handle health check endpoint
 async function handleHealthCheck(): Promise<Response> {

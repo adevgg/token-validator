@@ -1,4 +1,9 @@
-import { ErrorResponse } from "./types";
+// Error response
+export interface ErrorResponse {
+  error: string;
+  message: string;
+  code?: number;
+}
 
 // Create error response
 export function createErrorResponse(

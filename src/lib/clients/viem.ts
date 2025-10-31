@@ -1,12 +1,5 @@
 import { createPublicClient, http, PublicClient } from "viem";
-import * as chains from "viem/chains";
-
-const CHAIN_MAPPING = {
-  baseMainnet: {
-    viem: chains.base,
-    infura: "base-mainnet",
-  },
-};
+import { ChainName, getChainConfig } from "./chains";
 
 function infura(infuraChain: string, infuraApiKey: string) {
   return http(`https://${infuraChain}.infura.io/v3/${infuraApiKey}`);
@@ -15,18 +8,14 @@ function infura(infuraChain: string, infuraApiKey: string) {
 const clients: Record<string, PublicClient> = {};
 
 export const getClient = (
-  chain: string,
+  chain: ChainName,
   { infuraApiKey }: Partial<{ infuraApiKey: string }>
 ) => {
   if (clients[chain]) {
     return clients[chain];
   }
 
-  const chainConfig = CHAIN_MAPPING[chain as keyof typeof CHAIN_MAPPING];
-
-  if (!chainConfig) {
-    throw new Error(`Chain ${chain} not supported`);
-  }
+  const chainConfig = getChainConfig(chain);
 
   const transport =
     infuraApiKey && chainConfig.infura

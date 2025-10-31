@@ -7,6 +7,7 @@ declare global {
     // EXAMPLE_API_KEY?: string;
     // VALIDATION_CACHE?: KVNamespace;
     INFURA_API_KEY?: string;
+    ETHERSCAN_API_KEY?: string;
   }
 }
 

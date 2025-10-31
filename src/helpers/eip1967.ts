@@ -1,5 +1,5 @@
 import { Address, isAddress, PublicClient, zeroAddress } from "viem";
-import { MulticallResult } from "../utils";
+import { MulticallResult } from "./utils";
 
 // keccak256("eip1967.proxy.implementation")) - 1
 const EIP1967_IMPLICIT_ADDRESS_SLOT =
