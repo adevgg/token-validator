@@ -5,33 +5,44 @@ const TOKEN_VARIABLE_COLUMNS = {
   symbol: "E",
   decimals: "F",
   totalSupply: "G",
-  implementation: "H",
-  DEFAULT_ADMIN_ROLE: "I",
-  MANAGER_ROLE: "J",
-  MINTER_ROLE: "K",
-  BURNER_ROLE: "L",
-  PAUSER_ROLE: "M",
-  SALVAGER_ROLE: "N",
-  UPGRADER_ROLE: "O",
+  contractFactory: "H",
+  implementation: "I",
+  DEFAULT_ADMIN_ROLE: "J",
+  MANAGER_ROLE: "K",
+  MINTER_ROLE: "L",
+  BURNER_ROLE: "M",
+  PAUSER_ROLE: "N",
+  SALVAGER_ROLE: "O",
+  UPGRADER_ROLE: "P",
+  createdAt: "Q",
+  txHash: "R",
 }; // column name -> column index
+
+const TOKEN_INFO_COLUMNS = Object.keys(TOKEN_VARIABLE_COLUMNS).filter(
+  (key) => key !== "token" && key !== "result"
+);
 
 const TOKEN_ROW_INDEX_START = 14;
 
 const EXPECTED_VALUE_POSITION = {
-  implementation: {
+  contractFactory: {
     cell: "C3",
     type: "address",
   },
-  DEFAULT_ADMIN_ROLE: {
+  implementation: {
     cell: "C4",
-    type: "addresses",
+    type: "address",
   },
-  MANAGER_ROLE: {
+  DEFAULT_ADMIN_ROLE: {
     cell: "C5",
     type: "addresses",
   },
-  MINTER_ROLE: {
+  MANAGER_ROLE: {
     cell: "C6",
+    type: "addresses",
+  },
+  MINTER_ROLE: {
+    cell: "C7",
     type: "addresses",
   },
 };

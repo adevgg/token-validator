@@ -1,18 +1,3 @@
-const fieldsToCheck = [
-  "name",
-  "symbol",
-  "decimals",
-  "totalSupply",
-  "implementation",
-  "DEFAULT_ADMIN_ROLE",
-  "BURNER_ROLE",
-  "MANAGER_ROLE",
-  "MINTER_ROLE",
-  "PAUSER_ROLE",
-  "SALVAGER_ROLE",
-  "UPGRADER_ROLE",
-];
-
 function getSBTInfo(chain, tokenAddress) {
   // call api: ${API_BASE_URL}?address=${tokenAddress}&chain=${chain} return MulticallResult[]
   try {
@@ -73,8 +58,8 @@ function writeSBTInfo(sheetName, rowIndex, tokenAddress, info) {
   // Check for errors in info
   let hasError = false;
 
-  for (let i = 0; i < fieldsToCheck.length; i++) {
-    const field = fieldsToCheck[i];
+  for (let i = 0; i < TOKEN_INFO_COLUMNS.length; i++) {
+    const field = TOKEN_INFO_COLUMNS[i];
     if (info[field] && info[field].status === "failure") {
       hasError = true;
       break;
@@ -92,13 +77,18 @@ function writeSBTInfo(sheetName, rowIndex, tokenAddress, info) {
   }
 
   // Write each field to corresponding column
-  for (let i = 0; i < fieldsToCheck.length; i++) {
-    const field = fieldsToCheck[i];
+  for (let i = 0; i < TOKEN_INFO_COLUMNS.length; i++) {
+    const field = TOKEN_INFO_COLUMNS[i];
     const column = TOKEN_VARIABLE_COLUMNS[field];
+
     if (column) {
       const columnIndex = columnLetterToIndex(column);
-      const [value, status] = getFieldValue(info[field]);
+      let [value, status] = getFieldValue(info[field]);
       const cell = sheet.getRange(rowIndex, columnIndex);
+
+      if (field === "createdAt") {
+        value = new Date(value);
+      }
       updateCell(cell, value, status);
     }
   }
@@ -163,8 +153,8 @@ function updateSBTInfo(sheetName, rowIndex) {
   }
 
   // Clear fieldsToCheck related cells before getting SBT info
-  for (let i = 0; i < fieldsToCheck.length; i++) {
-    const field = fieldsToCheck[i];
+  for (let i = 0; i < TOKEN_INFO_COLUMNS.length; i++) {
+    const field = TOKEN_INFO_COLUMNS[i];
     const column = TOKEN_VARIABLE_COLUMNS[field];
     if (column) {
       const columnIndex = columnLetterToIndex(column);
