@@ -39,10 +39,10 @@ function writeSBTInfo(sheetName, rowIndex, tokenAddress, info) {
   }
 
   // Validate token address
-  const cellAddress = sheet.getRange(rowIndex, 2).getValue(); // Column B
-  if (cellAddress !== tokenAddress) {
+  const cellAddress = sheet.getRange(rowIndex, TOKEN_COLUMN_AT).getValue();
+  if (cellAddress.toLowerCase() !== tokenAddress.toLowerCase()) {
     Logger.log(`[writeSBTInfo] Address mismatch: row ${rowIndex}`);
-    const errorCell = sheet.getRange(rowIndex, 3); // Column C (result)
+    const errorCell = sheet.getRange(rowIndex, RESULT_COLUMN_AT);
     updateCell(errorCell, "❌ token address mismatch on update", "error");
     return;
   }
@@ -50,7 +50,7 @@ function writeSBTInfo(sheetName, rowIndex, tokenAddress, info) {
   // Check if info is null or has errors
   if (!info) {
     Logger.log(`[writeSBTInfo] Error: Info is null for row ${rowIndex}`);
-    const errorCell = sheet.getRange(rowIndex, 3); // Column C (result)
+    const errorCell = sheet.getRange(rowIndex, RESULT_COLUMN_AT);
     updateCell(errorCell, "❌ something wrong, cannot get info", "error");
     return;
   }
@@ -69,7 +69,7 @@ function writeSBTInfo(sheetName, rowIndex, tokenAddress, info) {
   Logger.log(`[writeSBTInfo] hasError: ${hasError}`);
 
   // Write result
-  const resultCell = sheet.getRange(rowIndex, 3); // Column C (result)
+  const resultCell = sheet.getRange(rowIndex, RESULT_COLUMN_AT);
   if (hasError) {
     updateCell(resultCell, "❌ something wrong", "error");
   } else {
@@ -79,19 +79,37 @@ function writeSBTInfo(sheetName, rowIndex, tokenAddress, info) {
   // Write each field to corresponding column
   for (let i = 0; i < TOKEN_INFO_COLUMNS.length; i++) {
     const field = TOKEN_INFO_COLUMNS[i];
-    const column = TOKEN_VARIABLE_COLUMNS[field];
+    const columnIndex = TOKEN_INFO_COLUMNS_START_AT + i;
+    let [value, status] = getFieldValue(info[field]);
+    const cell = sheet.getRange(rowIndex, columnIndex);
 
-    if (column) {
-      const columnIndex = columnLetterToIndex(column);
-      let [value, status] = getFieldValue(info[field]);
-      const cell = sheet.getRange(rowIndex, columnIndex);
-
-      if (field === "createdAt") {
-        value = new Date(value);
+    if (field === "createdAt") {
+      // Use formula for createdAt field with TIMEAGO function
+      if (value && value.trim() !== "") {
+        const dateString = Utilities.formatDate(
+          new Date(value),
+          Session.getScriptTimeZone(),
+          "yyyy-MM-dd HH:mm:ss"
+        );
+        setFormulaCell(cell, `=TIMEAGO("${dateString}")`);
+      } else {
+        updateCell(cell, "", status);
       }
+    } else {
       updateCell(cell, value, status);
     }
   }
+
+  // Write current time formula to UPDATED_AT_COLUMN_AT for TIMEAGO function
+  const updatedAtCell = sheet.getRange(rowIndex, UPDATED_AT_COLUMN_AT);
+  const currentDate = new Date();
+  // Format date as YYYY-MM-DD HH:MM:SS for TIMEAGO function
+  const dateString = Utilities.formatDate(
+    currentDate,
+    Session.getScriptTimeZone(),
+    "yyyy-MM-dd HH:mm:ss"
+  );
+  setFormulaCell(updatedAtCell, `=TIMEAGO("${dateString}")`);
 }
 
 // Helper function to extract value from MulticallResult
@@ -145,8 +163,8 @@ function updateSBTInfo(sheetName, rowIndex) {
     return;
   }
 
-  // Get token address from column B
-  const tokenAddress = sheet.getRange(rowIndex, 2).getValue(); // Column B
+  // Get token address
+  const tokenAddress = sheet.getRange(rowIndex, TOKEN_COLUMN_AT).getValue();
   if (!tokenAddress) {
     Logger.log(`[updateSBTInfo] Error: No token address at row ${rowIndex}`);
     return;
@@ -154,17 +172,13 @@ function updateSBTInfo(sheetName, rowIndex) {
 
   // Clear fieldsToCheck related cells before getting SBT info
   for (let i = 0; i < TOKEN_INFO_COLUMNS.length; i++) {
-    const field = TOKEN_INFO_COLUMNS[i];
-    const column = TOKEN_VARIABLE_COLUMNS[field];
-    if (column) {
-      const columnIndex = columnLetterToIndex(column);
-      const cell = sheet.getRange(rowIndex, columnIndex);
-      updateCell(cell, "", "success");
-    }
+    const columnIndex = TOKEN_INFO_COLUMNS_START_AT + i;
+    const cell = sheet.getRange(rowIndex, columnIndex);
+    updateCell(cell, "", "success");
   }
 
   // Set result cell to "updating"
-  const resultCell = sheet.getRange(rowIndex, 3); // Column C (result)
+  const resultCell = sheet.getRange(rowIndex, RESULT_COLUMN_AT);
   updateCell(resultCell, "⏳ updating", "pending");
 
   // Get SBT info

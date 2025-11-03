@@ -32,7 +32,7 @@ function handleValidateClick() {
   }
 
   const sheetName = sheet.getName();
-  const tokenColumnIndex = columnLetterToIndex(TOKEN_VARIABLE_COLUMNS.token);
+  const tokenColumnIndex = TOKEN_COLUMN_AT;
 
   // Get the range dimensions
   const startRow = range.getRow();

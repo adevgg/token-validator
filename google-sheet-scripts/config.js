@@ -1,51 +1,65 @@
-const TOKEN_VARIABLE_COLUMNS = {
-  token: "B",
-  result: "C",
-  name: "D",
-  symbol: "E",
-  decimals: "F",
-  totalSupply: "G",
-  contractFactory: "H",
-  implementation: "I",
-  DEFAULT_ADMIN_ROLE: "J",
-  MANAGER_ROLE: "K",
-  MINTER_ROLE: "L",
-  BURNER_ROLE: "M",
-  PAUSER_ROLE: "N",
-  SALVAGER_ROLE: "O",
-  UPGRADER_ROLE: "P",
-  createdAt: "Q",
-  txHash: "R",
-}; // column name -> column index
+const UPDATED_AT_COLUMN_AT = columnLetterToIndex("A");
+const TOKEN_COLUMN_AT = columnLetterToIndex("B");
+const RESULT_COLUMN_AT = columnLetterToIndex("C");
 
-const TOKEN_INFO_COLUMNS = Object.keys(TOKEN_VARIABLE_COLUMNS).filter(
-  (key) => key !== "token" && key !== "result"
-);
+const TOKEN_INFO_COLUMNS_START_AT = columnLetterToIndex("D");
+const TOKEN_INFO_COLUMNS = [
+  "name",
+  "symbol",
+  "decimals",
+  "totalSupply",
+  "contractFactory",
+  "implementation",
+  "DEFAULT_ADMIN_ROLE",
+  "MANAGER_ROLE",
+  "MINTER_ROLE",
+  "BURNER_ROLE",
+  "PAUSER_ROLE",
+  "SALVAGER_ROLE",
+  "UPGRADER_ROLE",
+  "createdAt",
+  "txHash",
+];
+
+// const TOKEN_INFO_COLUMNS = Object.keys(TOKEN_VARIABLE_COLUMNS).filter(
+//   (key) => key !== "token" && key !== "result"
+// );
 
 const TOKEN_ROW_INDEX_START = 14;
 
-const EXPECTED_VALUE_POSITION = {
-  contractFactory: {
-    cell: "C3",
+const EXPECTED_VALUE_COLUMN_AT = columnLetterToIndex("C");
+const EXPECTED_VALUE_ROW_INDEX_START = 3;
+
+// EXPECTED_VALUES is at (EXPECTED_VALUE_COLUMN_AT, EXPECTED_VALUE_ROW_INDEX_START + i)
+const EXPECTED_VALUES = [
+  {
+    key: "contractFactory",
     type: "address",
   },
-  implementation: {
-    cell: "C4",
+  {
+    key: "implementation",
     type: "address",
   },
-  DEFAULT_ADMIN_ROLE: {
-    cell: "C5",
+  {
+    key: "DEFAULT_ADMIN_ROLE",
     type: "addresses",
   },
-  MANAGER_ROLE: {
-    cell: "C6",
+  {
+    key: "MANAGER_ROLE",
     type: "addresses",
   },
-  MINTER_ROLE: {
-    cell: "C7",
+  {
+    key: "MINTER_ROLE",
     type: "addresses",
   },
-};
+];
+
+const EXPECTED_EMPTY_VALUES = [
+  "BURNER_ROLE",
+  "PAUSER_ROLE",
+  "SALVAGER_ROLE",
+  "UPGRADER_ROLE",
+];
 
 const SHEETS = {
   "Base Mainnet": "baseMainnet",

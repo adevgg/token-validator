@@ -29,9 +29,13 @@ function columnLetterToIndex(columnLetter) {
 function isResultSuccess(sheetName, rowIndex) {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = spreadsheet.getSheetByName(sheetName);
-  const resultCell = sheet.getRange(
-    rowIndex,
-    columnLetterToIndex(TOKEN_VARIABLE_COLUMNS.result)
-  ); // Column C (result)
+  const resultCell = sheet.getRange(rowIndex, RESULT_COLUMN_AT);
   return resultCell.getValue().includes("success");
+}
+
+// Unified function to set cell formula and style (success style only)
+function setFormulaCell(cell, formula) {
+  cell.setFormula(formula);
+  cell.setBackground("#ffffff"); // White background
+  cell.setFontColor("#000000"); // Black font
 }
