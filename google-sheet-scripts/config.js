@@ -25,9 +25,9 @@ const TOKEN_INFO_COLUMNS = [
 //   (key) => key !== "token" && key !== "result"
 // );
 
-const TOKEN_ROW_INDEX_START = 14;
+const TOKEN_ROW_INDEX_START = 17;
 
-const EXPECTED_VALUE_COLUMN_AT = columnLetterToIndex("C");
+const EXPECTED_VALUE_COLUMN_AT = columnLetterToIndex("B");
 const EXPECTED_VALUE_ROW_INDEX_START = 3;
 
 // EXPECTED_VALUES is at (EXPECTED_VALUE_COLUMN_AT, EXPECTED_VALUE_ROW_INDEX_START + i)
@@ -42,24 +42,35 @@ const EXPECTED_VALUES = [
   },
   {
     key: "DEFAULT_ADMIN_ROLE",
-    type: "addresses",
+    type: "address",
   },
   {
     key: "MANAGER_ROLE",
-    type: "addresses",
+    type: "address",
   },
   {
     key: "MINTER_ROLE",
-    type: "addresses",
+    type: "address",
+  },
+  {
+    key: "BURNER_ROLE",
+    type: "address",
+  },
+  {
+    key: "PAUSER_ROLE",
+    type: "address",
+  },
+  {
+    key: "SALVAGER_ROLE",
+    type: "address",
+  },
+  {
+    key: "UPGRADER_ROLE",
+    type: "address",
   },
 ];
 
-const EXPECTED_EMPTY_VALUES = [
-  "BURNER_ROLE",
-  "PAUSER_ROLE",
-  "SALVAGER_ROLE",
-  "UPGRADER_ROLE",
-];
+const EXPECTED_EMPTY_VALUES = [];
 
 const SHEETS = {
   "Base Mainnet": "baseMainnet",

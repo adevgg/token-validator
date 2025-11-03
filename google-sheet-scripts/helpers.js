@@ -39,3 +39,40 @@ function setFormulaCell(cell, formula) {
   cell.setBackground("#ffffff"); // White background
   cell.setFontColor("#000000"); // Black font
 }
+
+/**
+ * Extract Ethereum addresses from a text description
+ * Ethereum addresses are in the format: 0x followed by 40 hexadecimal characters
+ * @param {string} text - The text description to extract addresses from
+ * @returns {string[]} Array of unique Ethereum addresses found (empty array if none found)
+ */
+function extractEthereumAddresses(text) {
+  if (!text || typeof text !== "string") {
+    return [];
+  }
+
+  // Ethereum address pattern: 0x followed by exactly 40 hexadecimal characters
+  // Match case-insensitive to catch variations
+  const addressPattern = /0x[a-fA-F0-9]{40}/g;
+
+  // Find all matches
+  const matches = text.match(addressPattern);
+
+  if (!matches) {
+    return [];
+  }
+
+  // Convert to lowercase and remove duplicates
+  const uniqueAddresses = [];
+  const seen = new Set();
+
+  for (const address of matches) {
+    const lowerAddress = address.toLowerCase();
+    if (!seen.has(lowerAddress)) {
+      seen.add(lowerAddress);
+      uniqueAddresses.push(lowerAddress);
+    }
+  }
+
+  return uniqueAddresses;
+}

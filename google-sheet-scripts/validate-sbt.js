@@ -24,7 +24,10 @@ function validateSBTInner(sheetName, rawIndex) {
 
     // Get expected value from the configured cell
     const expectedRowIndex = EXPECTED_VALUE_ROW_INDEX_START + i;
-    const expectedCell = sheet.getRange(expectedRowIndex, EXPECTED_VALUE_COLUMN_AT);
+    const expectedCell = sheet.getRange(
+      expectedRowIndex,
+      EXPECTED_VALUE_COLUMN_AT
+    );
     const expectedValue = expectedCell.getValue();
 
     // Get current value from the row's corresponding column
@@ -39,31 +42,14 @@ function validateSBTInner(sheetName, rawIndex) {
 
     // Compare based on type
     if (expectedConfig.type === "address") {
-      // Compare single address (case-insensitive)
-      const currentLower = (currentValue || "").toString().toLowerCase().trim();
-      const expectedLower = (expectedValue || "")
-        .toString()
-        .toLowerCase()
-        .trim();
-      results[key] = currentLower === expectedLower;
-    } else if (expectedConfig.type === "addresses") {
-      // Compare arrays of addresses (case-insensitive)
-      // Current value might be a comma-separated string
+      // Extract all addresses from text using extractEthereumAddresses
+      // Treat address type as array
       const currentStr = (currentValue || "").toString();
       const expectedStr = (expectedValue || "").toString();
 
-      // Split by comma and normalize (trim, lowercase)
-      const currentArray = currentStr
-        .split(",")
-        .map((addr) => addr.trim().toLowerCase())
-        .filter((addr) => addr.length > 0)
-        .sort();
-
-      const expectedArray = expectedStr
-        .split(",")
-        .map((addr) => addr.trim().toLowerCase())
-        .filter((addr) => addr.length > 0)
-        .sort();
+      // Extract addresses and sort for comparison
+      const currentArray = extractEthereumAddresses(currentStr).sort();
+      const expectedArray = extractEthereumAddresses(expectedStr).sort();
 
       // Compare arrays
       if (currentArray.length !== expectedArray.length) {
@@ -151,21 +137,20 @@ function validateSBT(sheetName, rawIndex) {
           const expectedIndex = EXPECTED_VALUES.findIndex(
             (item) => item.key === key
           );
-          const expectedRowIndex = EXPECTED_VALUE_ROW_INDEX_START + expectedIndex;
+          const expectedRowIndex =
+            EXPECTED_VALUE_ROW_INDEX_START + expectedIndex;
           const expectedCell = sheet.getRange(
             expectedRowIndex,
             EXPECTED_VALUE_COLUMN_AT
           );
           const expectedValue = expectedCell.getValue();
 
-          warningMessage = `warning! '${
-            currentValue || ""
-          }' is not equal to '${expectedValue || ""}'`;
+          warningMessage = `warning! '${currentValue || ""}' is not equal to '${
+            expectedValue || ""
+          }'`;
         } else if (EXPECTED_EMPTY_VALUES.includes(key)) {
           // Field should be empty
-          warningMessage = `warning! '${
-            currentValue || ""
-          }' should be empty`;
+          warningMessage = `warning! '${currentValue || ""}' should be empty`;
         } else {
           warningMessage = `warning! validation failed for '${key}'`;
         }
