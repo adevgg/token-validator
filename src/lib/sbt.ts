@@ -4,6 +4,7 @@ import {
   getAddress,
   Hash,
   isAddress,
+  keccak256,
   PublicClient,
 } from "viem";
 import {
@@ -121,16 +122,32 @@ export const getSBTInformation = async (
       );
     });
 
+  const codeHashPromise = getHashOfContractCode(address, client)
+    .then((hash) => {
+      return {
+        status: "success",
+        result: hash,
+      };
+    })
+    .catch((error) => {
+      return {
+        status: "failure",
+        error: error,
+      };
+    });
+
   const [
     implementation,
     [name, symbol, decimals, totalSupply],
     roles,
     contractCreationDetails,
+    codeHash,
   ] = await Promise.all([
     getImplementationPromise,
     getTokenInfoPromise,
     getRolesPromise,
     contractCreationDetailsPromise,
+    codeHashPromise,
   ]);
 
   return {
@@ -141,8 +158,17 @@ export const getSBTInformation = async (
     totalSupply,
     ...roles,
     ...contractCreationDetails,
+    codeHash,
   };
 };
+
+async function getHashOfContractCode(address: Address, client: PublicClient) {
+  const code = await client.getCode({ address });
+  if (!code) {
+    return null;
+  }
+  return keccak256(code as `0x${string}`);
+}
 
 async function getContractCreationDetails(
   chain: ChainName,
