@@ -76,3 +76,29 @@ function extractEthereumAddresses(text) {
 
   return uniqueAddresses;
 }
+
+/**
+ * Extract codeHash from a text description
+ * codeHash is in the format: 0x followed by 64 hexadecimal characters (32 bytes)
+ * @param {string} text - The text description to extract codeHash from
+ * @returns {string} The first codeHash found (empty string if none found)
+ */
+function extractCodeHash(text) {
+  if (!text || typeof text !== "string") {
+    return "";
+  }
+
+  // codeHash pattern: 0x followed by exactly 64 hexadecimal characters (32 bytes)
+  // Match case-insensitive to catch variations
+  const codeHashPattern = /0x[a-fA-F0-9]{64}/;
+
+  // Find first match
+  const match = text.match(codeHashPattern);
+
+  if (!match) {
+    return "";
+  }
+
+  // Return lowercase version
+  return match[0].toLowerCase();
+}

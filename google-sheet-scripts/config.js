@@ -18,6 +18,7 @@ const TOKEN_INFO_COLUMNS = [
   "SALVAGER_ROLE",
   "UPGRADER_ROLE",
   "createdAt",
+  "codeHash",
   "txHash",
 ];
 
@@ -39,6 +40,10 @@ const EXPECTED_VALUES = [
   {
     key: "implementation",
     type: "address",
+  },
+  {
+    key: "codeHash",
+    type: "string",
   },
   {
     key: "DEFAULT_ADMIN_ROLE",

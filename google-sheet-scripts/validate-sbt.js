@@ -59,6 +59,17 @@ function validateSBTInner(sheetName, rawIndex) {
           (addr, index) => addr === expectedArray[index]
         );
       }
+    } else if (expectedConfig.key === "codeHash") {
+      // Extract codeHash from text using extractCodeHash
+      const currentStr = (currentValue || "").toString();
+      const expectedStr = (expectedValue || "").toString();
+
+      // Extract first codeHash found
+      const currentHash = extractCodeHash(currentStr);
+      const expectedHash = extractCodeHash(expectedStr);
+
+      // Compare codeHash values
+      results[key] = currentHash === expectedHash;
     } else {
       // Default: string comparison
       results[key] =
