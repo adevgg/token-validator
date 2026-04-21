@@ -5,6 +5,10 @@ const CHAIN_CONFIG = {
     viem: chains.base,
     infura: "base-mainnet",
   },
+  arbMainnet: {
+    viem: chains.arbitrum,
+    infura: "arbitrum-mainnet",
+  },
 } satisfies Record<string, ChainConfig>;
 
 export type ChainName = keyof typeof CHAIN_CONFIG;

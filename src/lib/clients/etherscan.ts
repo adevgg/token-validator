@@ -21,7 +21,6 @@ export class EtherscanClient {
   private readonly axios: AxiosInstance;
 
   constructor(apiKey?: string) {
-    console.log("EtherscanClient constructor", apiKey);
     this.axios = axios.create({
       baseURL: "https://api.etherscan.io/v2",
       headers: {

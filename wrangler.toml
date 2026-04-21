@@ -2,6 +2,7 @@ name = "contract-validator-worker"
 main = "src/index.ts"
 compatibility_date = "2024-11-06"
 compatibility_flags = ["nodejs_compat"]
+account_id = "c109a7819d25c6ac3dbaec2e5348b2fc"
 
 # Environment variables (uncomment and set as needed)
 # [vars]
