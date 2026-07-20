@@ -17,5 +17,6 @@ export const UPGRADER_ROLE =
   "0x189ab7a9244df0848122154315af71fe140f3db0fe014031783b0946b8c9d2e3";
 
 export const GeneralAbi = parseAbi([
-  "function getRoleMembers(bytes32 role) view returns (address[])",
+  "function getRoleMemberCount(bytes32 role) view returns (uint256)",
+  "function getRoleMember(bytes32 role, uint256 index) view returns (address)",
 ]);
