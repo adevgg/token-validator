@@ -20,7 +20,7 @@ import {
 import { getEIP1967ImplicitAddress } from "../helpers/eip1967";
 import { createErrorResponse, createSuccessResponse } from "../helpers/utils";
 import { ChainName } from "./clients/chains";
-import { EtherscanClient, getEtherscanClient } from "./clients/etherscan";
+import { getTenderlyClient, TenderlyClient } from "./clients/tenderly";
 import { getClient } from "./clients/viem";
 
 export async function handleGetSBTInformation(
@@ -39,12 +39,12 @@ export async function handleGetSBTInformation(
     return createErrorResponse("INVALID_REQUEST", "Invalid chain", 400);
   }
 
-  const etherscan = getEtherscanClient(env.ETHERSCAN_API_KEY);
+  const tenderly = getTenderlyClient();
   const client = getClient(chain, {
     infuraApiKey: env.INFURA_API_KEY,
   });
 
-  const info = await getSBTInformation(chain, address, client, etherscan);
+  const info = await getSBTInformation(chain, address, client, tenderly);
   return createSuccessResponse(info);
 }
 
@@ -62,13 +62,13 @@ export const getSBTInformation = async (
   chain: ChainName,
   address: Address,
   client: PublicClient,
-  etherscan: EtherscanClient
+  tenderly: TenderlyClient
 ) => {
   const contractCreationDetailsPromise = getContractCreationDetails(
     chain,
     address,
     client,
-    etherscan
+    tenderly
   );
 
   const getImplementationPromise = getEIP1967ImplicitAddress(client, address);
@@ -239,10 +239,10 @@ async function getContractCreationDetails(
   chain: ChainName,
   address: Address,
   client: PublicClient,
-  etherscan: EtherscanClient
+  tenderly: TenderlyClient
 ) {
   try {
-    const contractCreation = await etherscan.getContractCreation(
+    const contractCreation = await tenderly.getContractCreation(
       address,
       chain
     );
