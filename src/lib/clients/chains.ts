@@ -22,6 +22,10 @@ export type ChainConfig = {
   infura: string;
 };
 
+export function isChainName(chain: string): chain is ChainName {
+  return Object.prototype.hasOwnProperty.call(CHAIN_CONFIG, chain);
+}
+
 export function getChainConfig(chain: ChainName) {
   const config = CHAIN_CONFIG[chain];
   if (!config) {
