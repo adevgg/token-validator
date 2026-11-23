@@ -9,6 +9,10 @@ const CHAIN_CONFIG = {
     viem: chains.arbitrum,
     infura: "arbitrum-mainnet",
   },
+  bscMainnet: {
+    viem: chains.bsc,
+    infura: "bsc-mainnet",
+  },
 } satisfies Record<string, ChainConfig>;
 
 export type ChainName = keyof typeof CHAIN_CONFIG;
@@ -17,6 +21,10 @@ export type ChainConfig = {
   viem: chains.Chain;
   infura: string;
 };
+
+export function isChainName(chain: string): chain is ChainName {
+  return Object.prototype.hasOwnProperty.call(CHAIN_CONFIG, chain);
+}
 
 export function getChainConfig(chain: ChainName) {
   const config = CHAIN_CONFIG[chain];

@@ -19,7 +19,7 @@ import {
 } from "../helpers/abis";
 import { getEIP1967ImplicitAddress } from "../helpers/eip1967";
 import { createErrorResponse, createSuccessResponse } from "../helpers/utils";
-import { ChainName } from "./clients/chains";
+import { ChainName, isChainName } from "./clients/chains";
 import { getTenderlyClient, TenderlyClient } from "./clients/tenderly";
 import { getClient } from "./clients/viem";
 
@@ -29,13 +29,13 @@ export async function handleGetSBTInformation(
 ): Promise<Response> {
   const url = new URL(request.url);
   const address = url.searchParams.get("address");
-  const chain = url.searchParams.get("chain") as ChainName;
+  const chain = url.searchParams.get("chain");
 
   if (!address || !isAddress(address)) {
     return createErrorResponse("INVALID_REQUEST", "Invalid address", 400);
   }
 
-  if (!chain) {
+  if (!chain || !isChainName(chain)) {
     return createErrorResponse("INVALID_REQUEST", "Invalid chain", 400);
   }
 

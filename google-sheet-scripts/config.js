@@ -79,6 +79,8 @@ const EXPECTED_EMPTY_VALUES = [];
 
 const SHEETS = {
   "Base Mainnet": "baseMainnet",
+  "Arbitrum Mainnet": "arbMainnet",
+  "BSC Mainnet": "bscMainnet",
 }; // sheet name -> chain name
 
 const API_BASE_URL =
